@@ -3,45 +3,31 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-# -----------------------------------------
-# Generate realistic synthetic customer metrics
-# -----------------------------------------
-
-np.random.seed(42)
-
+# Generate synthetic data
+np.random.seed(0)
 data = pd.DataFrame({
-    "Customer_Satisfaction": np.random.normal(75, 8, 200),
-    "Engagement_Score": np.random.normal(65, 10, 200),
-    "Purchase_Frequency": np.random.normal(12, 3, 200),
-    "Avg_Session_Duration": np.random.normal(5, 1.2, 200),
-    "Marketing_Response_Rate": np.random.normal(0.18, 0.04, 200),
+    'Customer_Visits': np.random.randint(50, 300, 50),
+    'Time_On_Site': np.random.rand(50) * 10,
+    'Purchase_Frequency': np.random.rand(50) * 5,
+    'Satisfaction_Score': np.random.rand(50) * 100,
+    'Engagement_Score': np.random.rand(50) * 100
 })
 
+# Correlation matrix
 corr = data.corr()
 
-# -----------------------------------------
-# Visualization Settings (Professional Styling)
-# -----------------------------------------
-
+# Styling
 sns.set_style("white")
 sns.set_context("talk")
 
-plt.figure(figsize=(8, 8))  # 512x512 because dpi=64
-ax = sns.heatmap(
-    corr,
-    annot=True,
-    fmt=".2f",
-    cmap="Blues",
-    linewidths=1,
-    linecolor="white",
-    square=True,
-    cbar=True
-)
+# --- THE IMPORTANT PART ---
+# EXACT 512x512 px output
+plt.figure(figsize=(8, 8), dpi=64)   # 8 in × 64 dpi = EXACT 512 px
 
-plt.title("Customer Engagement Correlation Matrix", pad=20)
+ax = sns.heatmap(corr, annot=True, cmap="YlGnBu", square=True)
 
-# -----------------------------------------
-# Save Output (Exactly 512 × 512)
-# -----------------------------------------
+# Save WITHOUT bbox_inches='tight' (this breaks pixel size)
+plt.savefig("chart.png", dpi=64)
 
-plt.savefig("chart.png", dpi=64, bbox_inches='tight')
+# Close the figure
+plt.close()
